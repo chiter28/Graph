@@ -35,20 +35,17 @@ using namespace std;
 //}
 
 template<typename T>
-void swap(T* a, T* b)
+void swapi(T& a, T& b)
 {
-	T temp = *a;
-	*a = *b;
-	*b = temp;
+	T temp = a;
+	a = b;
+	b = temp;
 }
  
 int main()
 {
-	int a = 66;
-	int* p = &a;
-	int& r = *p;
-
-	cout << r << endl;
+	int* pa = new int;
+	
 
 
 
