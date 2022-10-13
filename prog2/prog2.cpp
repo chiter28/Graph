@@ -44,11 +44,11 @@ void swap(T* a, T* b)
  
 int main()
 {
-	int a = 4;
+	int a = 66;
 	int* p = &a;
 	int& r = *p;
 
-	cout << r;
+	cout << r << endl;
 
 
 
