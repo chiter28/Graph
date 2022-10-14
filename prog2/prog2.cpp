@@ -45,7 +45,9 @@ void swapi(T& a, T& b)
 int main()
 {
 	int* pa = new int;
+	*pa = 10;
 	
+	cout << pa << endl;
 
 
 
