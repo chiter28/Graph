@@ -20,14 +20,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="f1.txt">
-      <Filter>Файлы ресурсов</Filter>
-    </Text>
-    <Text Include="f2.txt">
-      <Filter>Файлы ресурсов</Filter>
-    </Text>
-    <Text Include="out.txt">
-      <Filter>Файлы ресурсов</Filter>
-    </Text>
+    <ClInclude Include="graph.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

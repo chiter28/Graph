@@ -1,118 +1,113 @@
 ﻿#include <iostream>
-#include <string>
-#include <fstream>
+#include <set>
+#include <deque>
+#include <vector>
+
+#include "graph.h"
+
 using namespace std;
 
-//ostream& operator << (ostream& os, istream& is)
-//{
-//	string s;
-//	is >> s;
-//	return os << s << " ";
-//}
-//
-//
-//int main()
-//{
-//	string file1, file2;
-//
-//	cout << "Enter name of first file: ";
-//	cin >> file1;
-//	ifstream in1{ file1 };
-//	
-//	cout << "Enter name of second file: ";
-//	cin >> file2;
-//	ifstream in2{ file2 };
-//
-//	ofstream out{ "out.txt" };
-//
-//	
-//
-//	
-//
-//	out << in1 << in2;
-//
-//
-//}
 
-void push_back(int*& arr, int& size, const int value)
+
+// Проход графа в глубину
+void DFS(const Graph_t& graph, vertex_t start, vector<bool>& used)
 {
-	int* newArr = new int[size + 1];
-	for (int i = 0; i < size; i++) {
-		newArr[i] = arr[i];
+	used[start] = true;
+	cout << start << ' '; 
+	set<vertex_t> neighbour_set = graph.set_of_neightbours[start];
+	for (auto& neighbour : neighbour_set) {
+		if (!used[neighbour]) {
+			DFS(graph, neighbour, used);
+		}
 	}
-	newArr[size] = value;
-	delete[] arr;
-	arr = newArr;
-	size++;
 }
 
-void pop_back(int*& arr, int& size)
+// Проход графа в ширину
+void BFS(const Graph_t& graph, vertex_t start, vector<bool>& used)
 {
-	int* newArr = new int[--size];
-	for (int i = 0; i < size; i++) {
-		newArr[i] = arr[i];
+	used[start] = true;
+	deque<vertex_t> fired;
+	fired.push_back(start);
+
+	while (not fired.empty()) {
+		vertex_t current = fired.front();
+		fired.pop_front();
+		auto neighbour_list = graph.set_of_neightbours[current];
+		for (auto neighbour : neighbour_list) {
+			if (not used[neighbour]) {
+				used[neighbour] = true;
+				fired.push_back(neighbour);
+				cout << neighbour << ' ';
+			}
+		}
 	}
-	delete[] arr;
-	arr = newArr;
 }
 
-void push_begin(int*& arr, int& size, const int value)
-{
-	int* newArr = new int[++size];
-	newArr[0] = value;
-	for (int i = 0; i < size; i++) {
-		newArr[i + 1] = arr[i];
-	}
-	delete[] arr;
-	arr = newArr;
-}
 
-void pop_begin(int*& arr, int& size)
-{
-	int* newArr = new int[--size];
-	for (int i = 0; i < size; i++) {
-		newArr[i] = arr[i + 1];
-	}
-	delete[] arr;
-	arr = newArr;
-}
 
-void push_inpos(int*& arr, int& size, const int value, const int pos)
+
+// Проверка графа на ацикличность (вернет true - если нет цикла) для неориентированного графа 
+bool check_DAG(const OrGraph_t& graph, vertex_t start, vector<bool>& used, vertex_t prev = 0)
 {
-	bool is_push = false;
-	int* newArr = new int[++size];
-	for (int i = 0; i < size; i++) {
-		if (i == pos) {
-			newArr[i] = value;
-			is_push = true;
+	set<vertex_t> neighbour_set = graph.set_of_neightbours[start];
+	for (auto& neighbour : neighbour_set) {
+		if (neighbour == prev) {
+			used[start] = true;
 			continue;
 		}
-		newArr[i] = arr[i - is_push];
+
+		if (used[neighbour]) return false;
+
+		if (not check_DAG(graph, neighbour, used, start)) return false;
 	}
-	delete[] arr;
-	arr = newArr;
+	return true;
 }
 
-void pop_inpos(int*& arr, int& size, const int pos)
-{
-	bool is_pop = false;
-	int* newArr = new int[--size];
-	for (int i = 0; i < size; i++) {
-		if (i == pos) {
-			is_pop = true;
-		}
-		newArr[i] = arr[i + is_pop];
-	}
-	delete[] arr;
-	arr = newArr;
-}
 
- 
+
+
+
 int main()
 {
-	
 
 
-	
+	OrGraph_t g1;
+	g1.input();
+	g1.print();
 
+	vector<bool> used(g1.vertexes_number, false);
+	bool is_DAG = true;
+	for (vertex_t v = 0; v < g1.vertexes_number; v++) {
+		if (used[v]) continue;
+		if (not check_DAG(g1, v, used)) {
+			is_DAG = false;
+			break; 
+		}
+	}
+	if (is_DAG) {
+		cout << "Acyclic graph" << endl;
+	}
+	else {
+		cout << "Cyclic graph" << endl;
+	}
 }
+
+//class Timer {
+//public:
+//	Timer() {
+//		start = chrono::high_resolution_clock::now();
+//	}
+//
+//	~Timer()
+//	{
+//		end = chrono::high_resolution_clock::now();
+//		cout << "DURATION " << chrono::duration<float>(end - start).count() << endl;
+//	}
+//	
+//private:
+//	chrono::steady_clock::time_point start;
+//	chrono::steady_clock::time_point end;
+//};
+
+
+

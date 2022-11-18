@@ -142,9 +142,7 @@
     <ClCompile Include="prog2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="f1.txt" />
-    <Text Include="f2.txt" />
-    <Text Include="out.txt" />
+    <ClInclude Include="graph.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
